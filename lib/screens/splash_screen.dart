@@ -18,7 +18,6 @@ class _SplashScreenState extends State<SplashScreen> {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: const Color(0xFFE0F7FA),
-        systemNavigationBarColor: const Color(0xFFE0F7FA),
       ),
     );
 
@@ -39,9 +38,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xFFE0F7FA),
-      body: Stack(
+        body: Container(
+      color: const Color(0xFFE6F5FF),
+      height: size.height,
+      width: size.width,
+      child: Stack(
         children: [
           Center(
             child: Image.asset(
@@ -50,46 +53,38 @@ class _SplashScreenState extends State<SplashScreen> {
               height: 280,
             ),
           ),
-          Positioned(
-            bottom: 40.0,
-            left: 0.0,
-            right: 0.0,
-            child: RichText(
-              textAlign: TextAlign.center,
-              text: const TextSpan(
-                style: TextStyle(
-                  height: 1.5,
-                  fontSize: 12,
-                  color: Colors.black87,
-                ),
+          const Positioned(
+            bottom: 16,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Column(
                 children: [
-                  TextSpan(
-                    text:
-                        'Jamkrindo Network Information Sebagai Database Jaringan Kantor\n',
+                  Text(
+                    "Jamkrindo Network Information Sebagai Database Jaringan\nKantor PT Jaminan Kredit Indonesia",
+                    style: TextStyle(
+                      fontSize: 12,
+                      height: 1.3,
+                      color: Colors.black87,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  TextSpan(
-                    text: 'PT Jaminan Kredit Indonesia',
+                  SizedBox(height: 10),
+                  Text(
+                    'Versi 1.0.0',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      color: Color(0xFF009EFF),
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
           ),
-          const Positioned(
-            bottom: 10.0,
-            left: 0,
-            right: 0,
-            child: Text(
-              'Versi 1.0.0',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF009EFF),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
         ],
       ),
-    );
+    ));
   }
 }
