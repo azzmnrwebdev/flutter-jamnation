@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:jamnation_mobile/screens/auth/login_screen.dart';
+import 'package:jamnation_mobile/screens/dashboard_screen.dart';
 
 class OtpScreen extends StatefulWidget {
   final String email; // Email diterima sebagai parameter dari halaman Login
@@ -12,10 +14,58 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+  // final TextEditingController _otpContriller = TextEditingController();
+  final String _correctOTP = '123456';
   String _otp = '';
   bool _isButtonDisabled = true;
   int _secondRemaining = 15;
   Timer? _timer;
+
+  void _validateOTP(){
+    if(_otp == _correctOTP){
+      Navigator.push(
+        context, 
+        MaterialPageRoute(builder: (context)=>DashboardScreen())
+      );
+    }else {
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) {
+          double screenWidth = MediaQuery.of(context).size.width;
+          return AlertDialog(
+          title: Image.asset(
+            'assets/icon/attention.png',
+            width: screenWidth * 0.2,
+          ),
+          content: const Text(
+              'Kode OTP yang anda masukan Salah !',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Colors.red
+              ),
+            ),
+            actions: [
+              
+              TextButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                }, 
+              child: Text(
+                'OKE',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+                )
+              )
+            ],
+          );
+        }
+      );
+      
+    }
+  }
 
   @override
   void initState() {
@@ -47,7 +97,14 @@ class _OtpScreenState extends State<OtpScreen> {
   // Bangun UI untuk halaman OTP
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async{
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context)=>LoginScreen())
+        );
+        return false;
+      }, child: Scaffold(
       body: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 0.90,
@@ -111,7 +168,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),
                     onPressed: _otp.isEmpty
                     ? null: () {
-                      (); // Verifikasi OTP ketika tombol ditekan
+                      _validateOTP(); // Verifikasi OTP ketika tombol ditekan
                       },
                   child: Text(
                     'Verify OTP',
@@ -123,19 +180,37 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
               const SizedBox(height: 10),
               if (_isButtonDisabled)
-                Text('Resend OTP in $_secondRemaining seconds')
+                Text(
+                  'Resend OTP in $_secondRemaining seconds',
+                  style: TextStyle(
+                    color: Colors.red[900]
+                  ),
+                )
               else
+              SizedBox(
+                width: double.infinity,
+                child: 
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF0C51A0)
+                  ),
                   onPressed: () {
                     _startCountdown(); // Kirim ulang OTP dan mulai hitungan mundur
                     // Kirim permintaan pengiriman ulang OTP ke server
                   },
-                  child: Text('Resend OTP'),
+                  child: Text(
+                    'Resend OTP',
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                    ),
                 ),
+              ),
             ],
           ),
         ),
       ),
+    )
     );
   }
 

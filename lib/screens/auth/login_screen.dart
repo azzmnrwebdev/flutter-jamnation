@@ -13,6 +13,111 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
+
+  String _currentNpp = '123';
+  String _currentPassword = '123';
+
+  Future <void> _validateLogin() async {
+    String npp = nppController.text.trim();
+    String password = passwordController.text.trim();
+    if (npp == _currentNpp && password == _currentPassword) {
+
+      await Future.delayed(Duration(seconds: 2));
+
+      Navigator.pop(context);
+
+      Navigator.push(
+        context, 
+        MaterialPageRoute(builder: (context) => OtpScreen(email: 'example@gmail.com'))
+      );
+    } else if (npp.isEmpty && password.isEmpty){
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) {
+          // ignore: unused_local_variable
+          double screenWidth = MediaQuery.of(context).size.width;
+          return AlertDialog(
+            actionsAlignment: MainAxisAlignment.center,
+            title: const Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 40,
+            ),
+          content: Text(
+            'Masukan NPP dan Password Anda!',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: Colors.red[900]
+            ),
+            ),
+            actions: [
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  }, 
+                  child: const Text(
+                    'Oke',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15
+                    ),
+                  )
+                ),
+              ),
+            ],
+          );
+        }
+      );
+    } else {
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) {
+          // ignore: unused_local_variable
+          double screenWidth = MediaQuery.of(context).size.width;
+          return AlertDialog(
+            actionsAlignment: MainAxisAlignment.center,
+            title: const Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 40,
+            ),
+          content: Text(
+            'NPP dan password anda salah !',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: Colors.red[900]
+            ),
+            ),
+            actions: [
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  }, 
+                  child: const Text(
+                    'Oke',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  )
+                ),
+              ),
+            ],
+          );
+        }
+      );
+    }
+  }
+
+
   // Membuat NPP dan Password Controller
   final nppController = TextEditingController();
   final passwordController = TextEditingController();
@@ -21,6 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordFocusNode = FocusNode();
 
   bool _isObscured = true;
+
 
   @override
   void dispose() {
@@ -48,25 +154,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 )
               ),
             ),
-            Positioned(
-              height: size.height * 0.65,
-              top: size.height * 0.25,
-              left: 30,
-              right: 30,
+            Center(
               child: 
               Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.all(20.0),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(
                     Radius.circular(40),
                   ),
                 ),
-                padding: const EdgeInsets.all(24.0),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const SizedBox(height: 36),
+                    const SizedBox(height: 45),
                     Center(
                       child: Image.asset(
                         'assets/images/logo.png',
@@ -193,11 +295,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: 
             ElevatedButton(
               onPressed: (){
-                // print('User Menekan Tombil Login !');
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => OtpScreen(email: '',) )
-                );
+                _validateLogin();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
