@@ -14,7 +14,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       appBar: AppBar(
 
       ),
-      body: Text('Ini adalah halaman notifikasi'),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(image: AssetImage('assets/images/notfound404.jpg'), fit: BoxFit.contain)
+            ),
+          )
+        ],
+      )
     );
   }
 }
