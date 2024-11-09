@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jamnation_mobile/screens/dashboard_screen_notification.dart';
-import 'package:jamnation_mobile/screens/dashboard_screen_profile.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
