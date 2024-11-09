@@ -29,7 +29,7 @@ class SplashScreen extends StatefulWidget {
 class SplashScreenState extends State<SplashScreen> {
   Future<String?> _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
+    return prefs.getString('access_token');
   }
 
   @override
@@ -44,7 +44,7 @@ class SplashScreenState extends State<SplashScreen> {
             if (snapshot.hasData && snapshot.data != null) {
               return const HomeScreen();
             } else {
-              return  LoginScreen();
+              return  const LoginScreen();
             }
           }
         },
