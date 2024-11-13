@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class NotificationsScreen extends StatefulWidget {
-  const NotificationsScreen({super.key});
+class ErrorScreen extends StatefulWidget {
+  const ErrorScreen({super.key});
 
   @override
-  State<NotificationsScreen> createState() => _NotificationsScreenState();
+  State<ErrorScreen> createState() => _ErrorScreenState();
 }
 
-class _NotificationsScreenState extends State<NotificationsScreen> {
+class _ErrorScreenState extends State<ErrorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
+        
       ),
       body: Stack(
         children: [

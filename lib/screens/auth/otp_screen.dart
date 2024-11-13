@@ -206,7 +206,7 @@ class _OtpScreenState extends State<OtpScreen> {
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       if (_secondRemaining == 0) {
         setState(() {
-          _isButtonDisabled = false;
+        _isButtonDisabled = false;
         });
         _timer?.cancel();
       } else {
