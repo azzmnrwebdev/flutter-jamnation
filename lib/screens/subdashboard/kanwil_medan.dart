@@ -1,28 +1,30 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:jamnation_mobile/screens/auth/data_maps.dart';
 import 'package:jamnation_mobile/screens/auth/login_screen.dart';
 import 'package:jamnation_mobile/screens/dashboard_screen.dart';
 import 'package:jamnation_mobile/screens/dashboard_screen_dbu.dart';
-import 'package:jamnation_mobile/screens/dashboard_screen_kanca.dart';
+import 'package:jamnation_mobile/screens/dashboard_screen_kck.dart';
 import 'package:jamnation_mobile/screens/dashboard_screen_kup.dart';
-import 'package:jamnation_mobile/screens/error_screen.dart';
 import 'package:jamnation_mobile/screens/path/costume_appbar_screen.dart';
 import 'package:jamnation_mobile/screens/path/dashboard_screen_faq.dart';
 
+class KanwilMedan extends StatefulWidget {
+  const KanwilMedan({super.key});
 
-class DashboardScreenKck extends StatefulWidget {
-  const DashboardScreenKck({super.key});
-
-  
   @override
-  State<DashboardScreenKck> createState() => _DashboardScreenKckState();
+  State<KanwilMedan> createState() => _KanwilMedanState();
 }
 
-
-class _DashboardScreenKckState extends State<DashboardScreenKck> {
+class _KanwilMedanState extends State<KanwilMedan> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    List<Marker> markers = [];
+    for (var region in regions){
+      
+    }
+    return Scaffold(
       appBar: CostumeAppbarScreen(),
       drawer: Drawer(
         child: ListView(
@@ -59,10 +61,10 @@ class _DashboardScreenKckState extends State<DashboardScreenKck> {
               leading: const Icon(FluentIcons.building_24_filled,),
               title: Text('KANTOR WILAYAH'),
               onTap: (){
+                Navigator.pop(context);
                 Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => DashboardScreen()
-                  )
+                  context,
+                  MaterialPageRoute(builder: (context) => DashboardScreen())
                 );
               },
             ),
@@ -70,18 +72,18 @@ class _DashboardScreenKckState extends State<DashboardScreenKck> {
               title: Text('KCK'),
               leading: Icon(FluentIcons.building_24_filled,),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => DashboardScreenKck()
+                  )
+                );
               },
             ),
             ListTile(
               title: Text('KANTOR CABANG'),
               leading: Icon(FluentIcons.building_24_filled,),
               onTap: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => DashboardScreenKanca()
-                  )
-                );
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -179,6 +181,52 @@ class _DashboardScreenKckState extends State<DashboardScreenKck> {
           ],
         ),
       ),
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: Alignment.centerLeft,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: (){
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(builder: (context)=>DashboardScreen())
+                        );
+                      }, 
+                      icon: Icon(Icons.arrow_back)
+                    ),
+                    Text(
+                      'KANTOR WILAYAH MEDAN',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF0C51A0)
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    TextButton.icon(
+                    onPressed: (){
+
+                    }, 
+                    label:  Text(
+                      'Wilayah kerja'
+                    ),
+                    icon: Icon(Icons.four_g_plus_mobiledata),
+                    ) 
+                  ],
+                )
+              ],
+            ) 
+          ),
+        ],
+      )
     );
   }
 }

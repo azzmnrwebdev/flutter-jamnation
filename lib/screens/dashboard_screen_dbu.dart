@@ -2,27 +2,22 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:jamnation_mobile/screens/auth/login_screen.dart';
 import 'package:jamnation_mobile/screens/dashboard_screen.dart';
-import 'package:jamnation_mobile/screens/dashboard_screen_dbu.dart';
-import 'package:jamnation_mobile/screens/dashboard_screen_kanca.dart';
+import 'package:jamnation_mobile/screens/dashboard_screen_kck.dart';
 import 'package:jamnation_mobile/screens/dashboard_screen_kup.dart';
-import 'package:jamnation_mobile/screens/error_screen.dart';
 import 'package:jamnation_mobile/screens/path/costume_appbar_screen.dart';
 import 'package:jamnation_mobile/screens/path/dashboard_screen_faq.dart';
 
+class DashboardScreenDbu extends StatefulWidget {
+  const DashboardScreenDbu({super.key});
 
-class DashboardScreenKck extends StatefulWidget {
-  const DashboardScreenKck({super.key});
-
-  
   @override
-  State<DashboardScreenKck> createState() => _DashboardScreenKckState();
+  State<DashboardScreenDbu> createState() => _DashboardScreenDbuState();
 }
 
-
-class _DashboardScreenKckState extends State<DashboardScreenKck> {
+class _DashboardScreenDbuState extends State<DashboardScreenDbu> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: CostumeAppbarScreen(),
       drawer: Drawer(
         child: ListView(
@@ -59,10 +54,10 @@ class _DashboardScreenKckState extends State<DashboardScreenKck> {
               leading: const Icon(FluentIcons.building_24_filled,),
               title: Text('KANTOR WILAYAH'),
               onTap: (){
+                Navigator.pop(context);
                 Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => DashboardScreen()
-                  )
+                  context,
+                  MaterialPageRoute(builder: (context) => DashboardScreen())
                 );
               },
             ),
@@ -70,18 +65,18 @@ class _DashboardScreenKckState extends State<DashboardScreenKck> {
               title: Text('KCK'),
               leading: Icon(FluentIcons.building_24_filled,),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => DashboardScreenKck()
+                  )
+                );
               },
             ),
             ListTile(
               title: Text('KANTOR CABANG'),
               leading: Icon(FluentIcons.building_24_filled,),
               onTap: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => DashboardScreenKanca()
-                  )
-                );
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -177,6 +172,11 @@ class _DashboardScreenKckState extends State<DashboardScreenKck> {
               ),
             )
           ],
+        ),
+      ),      
+      body: Center(
+        child: Text(
+          'INI DASHBOARD DBU'
         ),
       ),
     );

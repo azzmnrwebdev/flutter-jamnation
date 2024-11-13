@@ -3,8 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:jamnation_mobile/screens/auth/data_maps.dart';
 import 'package:jamnation_mobile/screens/auth/login_screen.dart';
+import 'package:jamnation_mobile/screens/dashboard_screen_dbu.dart';
+import 'package:jamnation_mobile/screens/dashboard_screen_kanca.dart';
+import 'package:jamnation_mobile/screens/dashboard_screen_kup.dart';
+import 'package:jamnation_mobile/screens/path/dashboard_screen_faq.dart';
+import 'package:jamnation_mobile/screens/path/dashboard_screen_notification.dart';
+import 'package:jamnation_mobile/screens/subdashboard/kanwil_banjarmasin.dart';
+import 'package:jamnation_mobile/screens/subdashboard/kanwil_denpasar.dart';
+import 'package:jamnation_mobile/screens/subdashboard/kanwil_makasar.dart';
+import 'package:jamnation_mobile/screens/subdashboard/kanwil_medan.dart';
 import 'package:jamnation_mobile/screens/dashboard_screen_KCK.dart';
-import 'package:jamnation_mobile/screens/dashboard_screen_notification.dart';
 import 'package:jamnation_mobile/screens/error_screen.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -105,11 +113,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               leading: const Icon(FluentIcons.building_24_filled,),
               title: Text('KANTOR WILAYAH'),
               onTap: (){
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => ErrorScreen()
-                  )
-                );
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -118,7 +122,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onTap: () {
                 Navigator.push(
                   context, 
-                  MaterialPageRoute(builder: (context) => ErrorScreen()
+                  MaterialPageRoute(builder: (context) => DashboardScreenKck()
                   )
                 );
               },
@@ -129,7 +133,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onTap: () {
                 Navigator.push(
                   context, 
-                  MaterialPageRoute(builder: (context) => ErrorScreen()
+                  MaterialPageRoute(builder: (context) => DashboardScreenKanca()
                   )
                 );
               },
@@ -140,7 +144,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onTap: () {
                 Navigator.push(
                   context, 
-                  MaterialPageRoute(builder: (context) => ErrorScreen()
+                  MaterialPageRoute(builder: (context) => DashboardScreenKup()
                   )
                 );
               },
@@ -151,7 +155,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onTap: () {
                 Navigator.push(
                   context, 
-                  MaterialPageRoute(builder: (context) => ErrorScreen()
+                  MaterialPageRoute(builder: (context) => DashboardScreenDbu()
                   )
                 );
               },
@@ -162,7 +166,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onTap: () {
                 Navigator.push(
                   context, 
-                  MaterialPageRoute(builder: (context) => ErrorScreen()
+                  MaterialPageRoute(builder: (context) => DashboardScreenFaq()
                   )
                 );
               },
@@ -184,17 +188,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         alignment: Alignment.center,
-                        title: Icon(Icons.warning),
+                        title: Icon(
+                          Icons.warning,
+                          size: 25,
+                          color: Colors.red,
+                        ),
                         content: Text(
-                          'Apakah anda yakin ingin keluar ?'
+                          'Apakah anda yakin ingin keluar ?',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18
+                          ),
                         ),
                         actions: [
-                          TextButton(
-                            onPressed: (){
-                              Navigator.of(context).pop();
-                            }, 
-                            child: Text('TIDAK')
-                          ),
                           TextButton(
                             onPressed: (){
                               Navigator.of(context).pop();
@@ -202,8 +208,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 context, 
                                 MaterialPageRoute(builder: (context)=>LoginScreen())
                               );
+                            }, 
+                            child: Center(child: Text(
+                                'IYA',
+                                style: TextStyle(
+                                ),
+                              )
+                            ), 
+                          ), 
+                          TextButton(
+                            onPressed: (){
+                              Navigator.of(context).pop();
+                              
                             } , 
-                            child: Text('IYA')
+                            child: Center(child: Text('Tidak'),)
                           )
                         ],
                       );
@@ -275,66 +293,91 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
                           showBottomBorder: true,
-                      columns: [
-                        DataColumn(label: Text('NO')),
-                        DataColumn(label: Text('Nama Unit Kerja')),
-                        DataColumn(label: Text('Kelas Wilayah'))
-                      ], 
-                      rows: [
-                        DataRow(
-                        onLongPress: () {
-                          Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context) => KanwilMedan())
-                          );
-                        }, 
-                        cells: [
-                          DataCell(Text('1')),
-                          DataCell(Text('Kantor Wilayah Medan')),
-                          DataCell(Text('B')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('2')),
-                          DataCell(Text('Kantor Wilayah Palembang')),
-                          DataCell(Text('B')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('3')),
-                          DataCell(Text('Kantor Wilayah Jakarta')),
-                          DataCell(Text('A')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('4')),
-                          DataCell(Text('Kantor Wilayah Bandung')),
-                          DataCell(Text('A')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('5')),
-                          DataCell(Text('Kantor Wilayah Semarang')),
-                          DataCell(Text('A')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('6')),
-                          DataCell(Text('Kantor Wilayah Surabaya')),
-                          DataCell(Text('A')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('7')),
-                          DataCell(Text('Kantor Wilayah Denpasar')),
-                          DataCell(Text('B')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('8')),
-                          DataCell(Text('Kantor Wilayah Banjarmasin')),
-                          DataCell(Text('B', textAlign: TextAlign.center,)),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('9')),
-                          DataCell(Text('Kantor Wilayah Makassar')),
-                          DataCell(Text('B')),
-                        ]),
-                      ]
-                    ),
+                          columns: [
+                          DataColumn(label: Text('NO')),
+                          DataColumn(label: Text('Nama Unit Kerja')),
+                          DataColumn(label: Text('Kelas Wilayah'))
+                          ], 
+                          rows: [
+                          DataRow(
+                          cells: [
+                            DataCell(Text('1')),
+                            DataCell(
+                              onTap: (){
+                                Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(builder: (context)=>KanwilMedan())
+                                );
+                              },
+                              Text('Kantor Wilayah Medan')),
+                            DataCell(Text('B')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('2')),
+                            DataCell(Text('Kantor Wilayah Palembang')),
+                            DataCell(Text('B')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('3')),
+                            DataCell(Text('Kantor Wilayah Jakarta')),
+                            DataCell(Text('A')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('4')),
+                            DataCell(Text('Kantor Wilayah Bandung')),
+                            DataCell(Text('A')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('5')),
+                            DataCell(Text('Kantor Wilayah Semarang')),
+                            DataCell(Text('A')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('6')),
+                            DataCell(Text('Kantor Wilayah Surabaya')),
+                            DataCell(Text('A')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('7')),
+                            DataCell(
+                              onTap: (){
+                                Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(builder: (context)=>KanwilDenpasar())
+                                );
+                              },
+                              Text('Kantor Wilayah Denpasar')),
+                            DataCell(Text('B')),
+                          ]),
+                        // Data Table Banjarmasin
+                          DataRow(cells: [
+                            DataCell(Text('8')),
+                            DataCell(
+                              onTap: (){
+                                Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(builder: (context)=>KanwilBanjarmasin())
+                                );
+                              },
+                              Text('Kantor Wilayah Banjarmasin')
+                            ),
+                            DataCell(Text('B', textAlign: TextAlign.center,)),
+                          ]),
+                          DataRow(cells: [
+                              DataCell(Text('9')),
+                              DataCell(
+                                onTap: (){
+                                Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(builder: (context)=>KanwilMakasar())
+                                );
+                              },
+                              Text('Kantor Wilayah Makassar')
+                              ),
+                              DataCell(Text('B')),
+                            ]),
+                          ]
+                        ),
                       )
                     )
                   )
@@ -344,24 +387,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ) 
         ],
       ),
-    );
-  }
-}
-
-
-
-class KanwilMedan extends StatefulWidget {
-  const KanwilMedan({super.key});
-
-  @override
-  State<KanwilMedan> createState() => _KanwilMedanState();
-}
-
-class _KanwilMedanState extends State<KanwilMedan> {
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Text('ini kanwil medan'),
     );
   }
 }
