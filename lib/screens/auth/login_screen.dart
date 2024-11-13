@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jamnation_mobile/screens/auth/otp_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,10 +15,19 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  // emulator
-  // final String apiUrl = 'http://10.0.2.2:8000/api/login';
-  // device asli
-  final String apiUrl = 'http://192.168.0.112:8000/api/login';
+  final String apiUrl = '${dotenv.env['API_URL']}/login';
+
+  void showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
 
   Future<void> _validateLogin() async {
     String npp = nppController.text.trim();
@@ -25,6 +35,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (npp.isNotEmpty && password.isNotEmpty) {
       try {
+        showLoadingDialog(context);
+
         final response = await http.post(
           Uri.parse(apiUrl),
           headers: <String, String>{
@@ -35,6 +47,9 @@ class _LoginScreenState extends State<LoginScreen> {
             'password': password,
           }),
         );
+
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
 
         if (response.statusCode == 200) {
           // ignore: unused_local_variable
