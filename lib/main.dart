@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:jamnation_mobile/screens/auth/login_screen.dart';
 import 'package:jamnation_mobile/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: '.env');
   runApp(const MyApp());
 }
 
@@ -44,7 +46,7 @@ class SplashScreenState extends State<SplashScreen> {
             if (snapshot.hasData && snapshot.data != null) {
               return const HomeScreen();
             } else {
-              return  const LoginScreen();
+              return const LoginScreen();
             }
           }
         },

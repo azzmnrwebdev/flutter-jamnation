@@ -7,6 +7,7 @@ import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:jamnation_mobile/screens/auth/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jamnation_mobile/screens/dashboard_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class OtpScreen extends StatefulWidget {
   final String email;
@@ -20,7 +21,7 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  final String apiUrl = 'http://192.168.0.112:8000/api/otp';
+  final String apiUrl = '${dotenv.env['API_URL']}/otp';
   String _otp = '';
   bool _isButtonDisabled = true;
   int _secondRemaining = 30;
