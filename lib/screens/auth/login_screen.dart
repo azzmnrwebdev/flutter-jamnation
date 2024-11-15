@@ -23,7 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return const Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
         );
       },
     );
@@ -60,8 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // ignore: unused_local_variable
           final email =
               emailMatch != null ? emailMatch.group(1) : 'example@gmail.com';
-          // ignore: use_build_context_synchronously
-          Navigator.pop(context);
+
           Navigator.push(
             // ignore: use_build_context_synchronously
             context,
@@ -128,6 +129,9 @@ class _LoginScreenState extends State<LoginScreen> {
               });
         }
       } catch (e) {
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+
         // ignore: avoid_print
         print('Terjadi kesalahan dalam koneksi ke server: $e');
         showDialog(

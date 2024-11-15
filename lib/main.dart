@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jamnation_mobile/screens/auth/login_screen.dart';
+import 'package:jamnation_mobile/screens/dashboard_screen.dart';
 import 'package:jamnation_mobile/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -44,7 +45,7 @@ class SplashScreenState extends State<SplashScreen> {
             return const Center(child: CircularProgressIndicator());
           } else {
             if (snapshot.hasData && snapshot.data != null) {
-              return const HomeScreen();
+              return const DashboardScreen();
             } else {
               return const LoginScreen();
             }
