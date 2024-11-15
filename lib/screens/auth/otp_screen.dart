@@ -23,14 +23,31 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   final String apiUrl = '${dotenv.env['API_URL']}/otp';
   String _otp = '';
+  bool _isFirstCountdown = true;
   bool _isButtonDisabled = true;
   int _secondRemaining = 30;
   Timer? _timer;
   bool clearText = false;
 
+  void showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> _validateOTP() async {
     if (_otp.isNotEmpty && _otp.length == 6) {
       try {
+        showLoadingDialog(context);
+
         final response = await http.post(
           Uri.parse(apiUrl),
           headers: <String, String>{
@@ -42,18 +59,21 @@ class _OtpScreenState extends State<OtpScreen> {
           }),
         );
 
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+
         if (response.statusCode == 200) {
           final responseData = jsonDecode(response.body);
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('access_token', widget.token);
-          await prefs.setString('user_login', responseData['user']);
+          await prefs.setString('user_login', jsonEncode(responseData['user']));
 
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
           // ignore: use_build_context_synchronously
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const DashboardScreen()));
-        }
-
-        if (response.statusCode == 400) {
+        } else if (response.statusCode == 400) {
           final responseData = jsonDecode(response.body);
           final message = responseData['message'];
           showDialog(
@@ -120,10 +140,72 @@ class _OtpScreenState extends State<OtpScreen> {
               );
             },
           );
+        } else {
+          showDialog(
+              // ignore: use_build_context_synchronously
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  actionsAlignment: MainAxisAlignment.center,
+                  title: const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 60,
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Verifikasi OTP Gagal',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  content: const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Terjadi kesalahan pada server.',
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _otp = '';
+                              clearText = true;
+                            });
+                            Future.delayed(const Duration(milliseconds: 200),
+                                () {
+                              setState(() {
+                                clearText = false;
+                              });
+                            });
+                            Navigator.pop(context);
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.red.shade100,
+                            padding: const EdgeInsets.all(14),
+                          ),
+                          child: const Text(
+                            'Tutup',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18),
+                          )),
+                    ),
+                  ],
+                );
+              });
         }
       } catch (e) {
-        // ignore: avoid_print
-        print('Terjadi kesalahan dalam koneksi ke server: $e');
         showDialog(
             // ignore: use_build_context_synchronously
             context: context,
@@ -203,10 +285,20 @@ class _OtpScreenState extends State<OtpScreen> {
       _isButtonDisabled = true;
     });
 
+    if (!_isFirstCountdown) {
+      // Panggil API hanya jika ini bukan countdown pertama
+      _resendOtp();
+    } else {
+      // Set flag ke false setelah pertama kali countdown
+      setState(() {
+        _isFirstCountdown = false;
+      });
+    }
+
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       if (_secondRemaining == 0) {
         setState(() {
-        _isButtonDisabled = false;
+          _isButtonDisabled = false;
         });
         _timer?.cancel();
       } else {
@@ -217,12 +309,261 @@ class _OtpScreenState extends State<OtpScreen> {
     });
   }
 
+  Future<void> _resendOtp() async {
+    try {
+      final response = await http.post(
+          Uri.parse('${dotenv.env['API_URL']}/request/otp'),
+          headers: <String, String>{
+            'Authorization': 'Bearer ${widget.token}',
+            'Content-Type': 'application/json; charset=UTF-8',
+          });
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        final message = responseData['message'];
+        showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                actionsAlignment: MainAxisAlignment.center,
+                title: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                      size: 60,
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Kirim Ulang OTP Berhasil',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      message,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                actions: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _isButtonDisabled = false;
+                          });
+                          Navigator.pop(context);
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.green.shade100,
+                          padding: const EdgeInsets.all(14),
+                        ),
+                        child: const Text(
+                          'Tutup',
+                          style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18),
+                        )),
+                  ),
+                ],
+              );
+            });
+      } else if (response.statusCode == 400) {
+        showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                actionsAlignment: MainAxisAlignment.center,
+                title: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 60,
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Kirim Ulang OTP Gagal',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                content: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Token Kadaluarsa, silahkan lakukan login ulang kembali.',
+                    ),
+                  ],
+                ),
+                actions: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            // ignore: use_build_context_synchronously
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.red.shade100,
+                          padding: const EdgeInsets.all(14),
+                        ),
+                        child: const Text(
+                          'Tutup',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18),
+                        )),
+                  ),
+                ],
+              );
+            });
+      } else {
+        showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                actionsAlignment: MainAxisAlignment.center,
+                title: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 60,
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Kirim Ulang OTP Gagal',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                content: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Terjadi kesalahan pada server.',
+                    ),
+                  ],
+                ),
+                actions: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _isButtonDisabled = false;
+                          });
+                          Navigator.pop(context);
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.red.shade100,
+                          padding: const EdgeInsets.all(14),
+                        ),
+                        child: const Text(
+                          'Tutup',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18),
+                        )),
+                  ),
+                ],
+              );
+            });
+      }
+    } catch (e) {
+      showDialog(
+          // ignore: use_build_context_synchronously
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              actionsAlignment: MainAxisAlignment.center,
+              title: const Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 60,
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Kirim Ulang OTP Gagal',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              content: const Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Terjadi kesalahan dalam koneksi ke server.',
+                  ),
+                ],
+              ),
+              actions: [
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _isButtonDisabled = false;
+                        });
+                        Navigator.pop(context);
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.red.shade100,
+                        padding: const EdgeInsets.all(14),
+                      ),
+                      child: const Text(
+                        'Tutup',
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18),
+                      )),
+                ),
+              ],
+            );
+          });
+    }
+  }
+
   // Bangun UI untuk halaman OTP
   @override
   Widget build(BuildContext context) {
     // ignore: deprecated_member_use
     return WillPopScope(
         onWillPop: () async {
+          // Keluar dari aplikasi jika tombol back ditekan
+          // exit(0);
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const LoginScreen()));
           return false;
