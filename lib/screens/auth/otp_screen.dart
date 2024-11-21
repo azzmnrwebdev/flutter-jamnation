@@ -71,7 +71,7 @@ class _OtpScreenState extends State<OtpScreen> {
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
           // ignore: use_build_context_synchronously
-          Navigator.push(context,
+          Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const DashboardScreen()));
         } else if (response.statusCode == 400) {
           final responseData = jsonDecode(response.body);
@@ -415,13 +415,11 @@ class _OtpScreenState extends State<OtpScreen> {
                     width: double.infinity,
                     child: TextButton(
                         onPressed: () {
-                          Navigator.push(
-                            // ignore: use_build_context_synchronously
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginScreen(),
-                            ),
-                          );
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()));
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.red.shade100,
