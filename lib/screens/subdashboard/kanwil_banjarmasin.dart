@@ -429,7 +429,6 @@ class _KanwilBanjarMasinState extends State<KanwilBanjarmasin> {
                   'KANTOR WILAYAH BANJARMASIN',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),
                 ),
-                
                 Row(
                   children: [
                     TextButton(
