@@ -1,18 +1,13 @@
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:jamnation_mobile/screens/auth/data_maps.dart';
-import 'package:jamnation_mobile/screens/auth/login_screen.dart';
-import 'package:jamnation_mobile/screens/dashboard_screen_dbu.dart';
-import 'package:jamnation_mobile/screens/dashboard_screen_kanca.dart';
-import 'package:jamnation_mobile/screens/dashboard_screen_kup.dart';
-import 'package:jamnation_mobile/screens/path/dashboard_screen_faq.dart';
-import 'package:jamnation_mobile/screens/path/dashboard_screen_notification.dart';
+import 'package:jamnation_mobile/screens/costume_screen/drawer_costume.dart';
+import 'package:jamnation_mobile/screens/costume_screen/costume_appbar_screen.dart';
+import 'package:jamnation_mobile/screens/data_maps/data_maps_kantor_banjarmasin.dart';
 import 'package:jamnation_mobile/screens/subdashboard/kanwil_banjarmasin.dart';
 import 'package:jamnation_mobile/screens/subdashboard/kanwil_denpasar.dart';
 import 'package:jamnation_mobile/screens/subdashboard/kanwil_makasar.dart';
 import 'package:jamnation_mobile/screens/subdashboard/kanwil_medan.dart';
-import 'package:jamnation_mobile/screens/dashboard_screen_KCK.dart';
 import 'package:jamnation_mobile/screens/error_screen.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -24,6 +19,13 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  List<String> data = [];
+  Future<void> getData()async{
+    print('Load Data ...');
+    data = List<String>.generate(
+      15, (index) => "flutt"
+    );
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -51,191 +53,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
     
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        actions: [
-          IconButton(
-            onPressed: (){
-              Navigator.push(
-                context, 
-                MaterialPageRoute(
-                  builder: (context) => NotificationsScreen()
-                )
-              );
-            },
-            icon: Icon(Icons.notifications),
-          ),
-        ],
-        elevation: 50.0,
-        leading: Builder(
-          builder: (context) {
-            return IconButton(
-              onPressed: (){
-                Scaffold.of(context).openDrawer();
-              }, 
-              icon: const Icon(Icons.menu)
-            );
-          } 
-        )
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color(0xFF0C51A0)
-              ),
-              child: UserAccountsDrawerHeader(
-                decoration: BoxDecoration(
-                  color: Color(0xFF0C51A0)
-                ),
-                accountName:Text('Admin'), 
-                accountEmail: Text("example@gmail.com"),
-                currentAccountPictureSize: Size.square(45),
-                currentAccountPicture: CircleAvatar(
-                  child: Text(
-                    "A",
-                    style: TextStyle(
-                      fontSize: 30.0
-                    ),
-                  ),
-                ),
-              )
-            ),
-            ListTile(
-              leading: Icon(Icons.dashboard),
-              title: Text('DASHBOARD'),
-              titleAlignment: ListTileTitleAlignment.center,
-              
-            ),
-            ListTile(
-              leading: const Icon(FluentIcons.building_24_filled,),
-              title: Text('KANTOR WILAYAH'),
-              onTap: (){
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('KCK'),
-              leading: Icon(FluentIcons.building_24_filled,),
-              onTap: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => DashboardScreenKck()
-                  )
-                );
-              },
-            ),
-            ListTile(
-              title: Text('KANTOR CABANG'),
-              leading: Icon(FluentIcons.building_24_filled,),
-              onTap: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => DashboardScreenKanca()
-                  )
-                );
-              },
-            ),
-            ListTile(
-              title: Text('KUP'),
-              leading: Icon(FluentIcons.building_24_filled,),
-              onTap: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => DashboardScreenKup()
-                  )
-                );
-              },
-            ),
-            ListTile(
-              title: Text('DBU'),
-              leading: Icon(FluentIcons.person_24_filled,),
-              onTap: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => DashboardScreenDbu()
-                  )
-                );
-              },
-            ),
-            ListTile(
-              title: Text('FAQ'),
-              leading: Icon(FluentIcons.question_circle_20_regular),
-              onTap: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => DashboardScreenFaq()
-                  )
-                );
-              },
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: ListTile(
-                title: Text(
-                  'KELUAR',
-                  style: TextStyle(color: Colors.red),
-                ),
-                leading: Icon(
-                  Icons.logout,
-                  color: Colors.red,
-                ),
-                onTap: () {
-                  showDialog(
-                    context: context, 
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        alignment: Alignment.center,
-                        title: Icon(
-                          Icons.warning,
-                          size: 25,
-                          color: Colors.red,
-                        ),
-                        content: Text(
-                          'Apakah anda yakin ingin keluar ?',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: (){
-                              Navigator.of(context).pop();
-                              Navigator.pushReplacement(
-                                context, 
-                                MaterialPageRoute(builder: (context)=>LoginScreen())
-                              );
-                            }, 
-                            child: Center(child: Text(
-                                'IYA',
-                                style: TextStyle(
-                                ),
-                              )
-                            ), 
-                          ), 
-                          TextButton(
-                            onPressed: (){
-                              Navigator.of(context).pop();
-                              
-                            } , 
-                            child: Center(child: Text('Tidak'),)
-                          )
-                        ],
-                      );
-                    }
-                  );
-                },
-              ),
-            )
-          ],
-        ),
-      ),
-      body: Column(
+      backgroundColor: Color(0XFFFFFFFF),
+      appBar: CostumeAppbarScreen(),
+      drawer: DrawerCostume(),
+      body: 
+      Column(
         children: [
           Container(
+            color: Color(0xffffffff),
             padding: EdgeInsets.all(16.0),
             alignment: Alignment.centerLeft,
             child: Text(
@@ -243,7 +68,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF0C51A0)
               ),
             ),
           ),
@@ -264,6 +88,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               child: Column(
                 children: [
+                  TextField(
+                    decoration: 
+                    InputDecoration(
+                      fillColor: Color(0xFFBDC3C7),
+                      prefixIcon: Icon(Icons.search),
+                      hintText: 'Search...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Color(0xFFBDC3C7))
+                      ),
+                    ),
+                    onChanged: (value) => getData(),
+                  ),
+                  // Expanded(
+                  //   child : ListView.builder(
+                  //     padding: EdgeInsets.only(top:10),
+                  //     itemCount: data.length,
+                  //     itemBuilder: (context, index){
+                  //       return ListTile(
+                  //         title: Text(data[index]),
+                  //       );
+                  //     }
+                  //   )
+                  // ),
+                  SizedBox(height: 8,),
                   Expanded(
                     flex: 2,
                     child: FlutterMap(

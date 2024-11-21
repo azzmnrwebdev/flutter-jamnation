@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jamnation_mobile/screens/path/costume_appbar_screen.dart';
+import 'package:jamnation_mobile/screens/costume_screen/costume_appbar_screen.dart';
+import 'package:jamnation_mobile/screens/costume_screen/drawer_costume.dart';
 
 class DashboardScreenFaq extends StatefulWidget {
   const DashboardScreenFaq({super.key});
@@ -13,6 +14,7 @@ class _DashboardScreenFaqState extends State<DashboardScreenFaq> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CostumeAppbarScreen(),
+      drawer: DrawerCostume(),
 
       body: Center(
         child: Text(

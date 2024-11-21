@@ -1,8 +1,4 @@
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:jamnation_mobile/screens/auth/login_screen.dart';
-import 'package:jamnation_mobile/screens/dashboard_screen_kck.dart';
-import 'package:jamnation_mobile/screens/error_screen.dart';
 import 'package:jamnation_mobile/screens/path/dashboard_screen_notification.dart';
 
 class CostumeAppbarScreen extends StatelessWidget implements PreferredSizeWidget {
@@ -11,6 +7,12 @@ class CostumeAppbarScreen extends StatelessWidget implements PreferredSizeWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      title: Image(
+        image: AssetImage(
+          'assets/images/logo.png',
+        ),
+        width: 150,
+      ),
       backgroundColor: Colors.white,
       actions: [
         IconButton(
@@ -37,7 +39,7 @@ class CostumeAppbarScreen extends StatelessWidget implements PreferredSizeWidget
     );
     
   }
-
+  
   // Tentukan ukuran preferensi untuk AppBar
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);

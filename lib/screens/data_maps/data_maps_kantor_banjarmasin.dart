@@ -29,6 +29,36 @@ List<Kantor> kantors = [
 ];
 
 
+// TITIK KOTA MEDAN
+class KantorMedan{
+  final String name;
+  final LatLng location;
+
+  KantorMedan({required this.name, required this.location});
+}
+
+class KantorWilayahMedan {
+  final String name;
+  final List<KantorMedan> cities;
+
+  KantorWilayahMedan({required this.name, required this.cities});
+}
+
+List<KantorWilayahMedan> kantorsmedan = [
+  KantorWilayahMedan(
+    name: 'Kantor Wilayah Medan', 
+    cities: [
+      KantorMedan(name: 'Kantor Cabang Pekan Baru', location: LatLng(0.526350, 101.451511)),
+      KantorMedan(name: 'Kantor Cabang Medan', location: LatLng(3.575234, 98.687531)),
+      KantorMedan(name: 'Kantor Cabang Padang', location: LatLng(-0.884276, 100.388175)),
+      KantorMedan(name: 'Kantor Cabang Tanjung Pinang', location: LatLng(0.918431, 104.466495)),
+      KantorMedan(name: 'Kantor Cabang Batam', location: LatLng(1.099050, 104.017057)),
+      KantorMedan(name: 'Kantor Cabang Balige', location: LatLng(2.333602, 99.083210)),
+    ]
+  )
+];
+
+
 class DataMapsKantorBanjarmasin extends StatefulWidget {
   const DataMapsKantorBanjarmasin({super.key});
 

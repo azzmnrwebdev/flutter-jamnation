@@ -1,26 +1,19 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:jamnation_mobile/screens/auth/login_screen.dart';
-import 'package:jamnation_mobile/screens/costume_screen/costume_appbar_screen.dart';
 import 'package:jamnation_mobile/screens/dashboard_screen.dart';
 import 'package:jamnation_mobile/screens/dashboard_screen_dbu.dart';
 import 'package:jamnation_mobile/screens/dashboard_screen_kanca.dart';
 import 'package:jamnation_mobile/screens/dashboard_screen_kck.dart';
+import 'package:jamnation_mobile/screens/dashboard_screen_kup.dart';
 import 'package:jamnation_mobile/screens/path/dashboard_screen_faq.dart';
 
-class DashboardScreenKup extends StatefulWidget {
-  const DashboardScreenKup({super.key});
+class DrawerCostume extends StatelessWidget {
+  const DrawerCostume({super.key});
 
-  @override
-  State<DashboardScreenKup> createState() => _DashboardScreenKupState();
-}
-
-class _DashboardScreenKupState extends State<DashboardScreenKup> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CostumeAppbarScreen(),
-      drawer: Drawer(
+    return Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -45,6 +38,7 @@ class _DashboardScreenKupState extends State<DashboardScreenKup> {
                 ),
               )
             ),
+            
             ListTile(
               leading: Icon(Icons.dashboard),
               title: Text('DASHBOARD'),
@@ -55,9 +49,10 @@ class _DashboardScreenKupState extends State<DashboardScreenKup> {
               leading: const Icon(FluentIcons.building_24_filled,),
               title: Text('KANTOR WILAYAH'),
               onTap: (){
+                Navigator.pop(context);
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context)=>DashboardScreen())
+                  context, 
+                  MaterialPageRoute(builder: (context) => DashboardScreen())
                 );
               },
             ),
@@ -87,8 +82,11 @@ class _DashboardScreenKupState extends State<DashboardScreenKup> {
               title: Text('KUP'),
               leading: Icon(FluentIcons.building_24_filled,),
               onTap: () {
-                Navigator.pop(context);
-                
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => DashboardScreenKup()
+                  )
+                );
               },
             ),
             ListTile(
@@ -174,12 +172,6 @@ class _DashboardScreenKupState extends State<DashboardScreenKup> {
             )
           ],
         ),
-      ),
-      body: Center(
-        child: Text(
-          'Dashboard KUP'
-        ),
-      ),
-    );
+      );
   }
 }

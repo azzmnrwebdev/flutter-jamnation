@@ -50,7 +50,7 @@ class SplashScreenState extends State<SplashScreen> {
             if (snapshot.hasData && snapshot.data != null) {
               return const DashboardScreen();
             } else {
-              return const LoginScreen();
+              return const KanwilBanjarmasin();
             }
           }
         },
